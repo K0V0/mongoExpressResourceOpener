@@ -3,23 +3,31 @@
 <html>
 
   <head>
-    <title>BandzoneDownloader</title>
+    <meta charset="UTF-8">
+    <title>MongoExpressResourceOpener</title>
+    <link rel="stylesheet" type="text/css" href="/gfx/reset.css">
     <link rel="stylesheet" type="text/css" href="/gfx/popup.css">
+    <script src="/js/settings_utils.js"></script>
     <script src="/js/message_utils.js"></script>
     <script src="/js/popup_helper.js"></script>
     <script src="/js/popup.js"></script>
   </head>
 
-  <body class="main">
+  <body>
 
-   <input type="text" id="resourceId">
+    <section>
+      <h1>MongoExpressResourceOpener</h1>
+    </section>
 
-   <button id="submitResourceId">Otvoriť</button>
+    <section class="centered">
+      <input type="text" id="resourceId">
+      <button id="submitResourceId">Otvoriť</button>
+    </section>
 
-   <br>
-
-   <input type="checkbox" id="autoSubmitResourceId">
-   <label for="autoSubmitResourceId" id="autoSubmitResourceIdLabel">Odpáliť automaticky po vložení</label>
+    <section class="centered">
+      <input type="checkbox" id="autoSubmitResourceId">
+      <label for="autoSubmitResourceId" id="autoSubmitResourceIdLabel">Odpáliť automaticky po vložení</label>
+    </section>
 
   </body>
 

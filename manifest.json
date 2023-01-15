@@ -10,7 +10,9 @@
   },
 
   "permissions": [
-    "tabs"
+    "tabs",
+    "storage",
+    "clipboardRead"
   ],
 
   "background": {

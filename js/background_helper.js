@@ -8,7 +8,7 @@ function BackgroundHelper() {
     this.MESSAGE_UTILS = new MessageUtils();
     //TODO docasne riesenie na proof of concept, bude sa pekne konfigurovat cez GUI v nastaveniach, ulozenie na localStorage alebo ine
     this.DATASETS = [
-        'https://kurva',
+        'https://google.sk',
         'https://pica.rite',
         'https://kokot.pica'
     ];
@@ -18,6 +18,10 @@ BackgroundHelper.prototype = {
     constructor: BackgroundHelper,
     
     checkResourceExistence: function(resourceId) {
+        if (resourceId === undefined || resourceId === null || resourceId.trim() === "") {
+            return;
+        }
+
         var context = this;
         var promises = [];
 

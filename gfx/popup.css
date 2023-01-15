@@ -1,11 +1,98 @@
-body.main {
-    text-align: center;
-    font-size: 1em;
-    background-color: black;
-    color: white;
+body {
+    font-size: 1.25em;
+    background-color: white;
+    color: black;
     min-width: 320px;
     margin:0;
-    padding: 0.5em;
+    padding: 0.75em;
     outline: 0px transparent !important;
     box-sizing: border-box;
+    border: 0.25em solid #00ADEF;
+}
+
+section {
+    margin: 0.75em 0;
+    display: flex;
+}
+
+section:first-child {
+    margin-top: 0;
+}
+
+section:last-child {
+    margin-bottom: 0;
+}
+
+h1 {
+    font-size: 1.25em;
+    font-weight: bold;
+}
+
+input, button, label {
+    margin: 0 0.125em;
+}
+
+input, button {
+    border-radius: 0.25em;
+}
+
+button {
+    background-color: #00ADEF;
+    padding: 0.25em 0.375em;
+    font-weight: bold;
+    color:white;
+}
+
+button:hover {
+    background-color: #00ADEF;
+}
+
+label:hover {
+    text-decoration: underline;
+}
+
+input[type=text], input[type=checkbox] { 
+    border: 0.125em solid #00ADEF;
+    background-color: #eee;
+    transition: background-color 0.25s ease-in-out;
+}
+
+input[type=checkbox], button, label { 
+    cursor: pointer;
+}
+
+input[type=text] {
+    text-align: left;
+    padding: 0.125em 0.25em;
+}
+
+input[type=text]:active, input[type=text]:focus {
+    background-color: white;
+}
+
+input[type=checkbox] {
+   width: 1.5em;
+   height: 1.5em;
+   position: relative;
+}
+
+input[type=checkbox]::after {
+    content: '✓';
+    font-weight: bold;
+    color: white;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+input[type=checkbox]:checked {
+    background-color: #00ADEF;
+}
+
+
+
+.centered {
+    text-align: center;
 }
