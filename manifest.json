@@ -1,0 +1,44 @@
+{
+  "name": "MongoDB resource opener",
+  "description": "Opens MongoDB resource",
+  "version": "0.1.0",
+
+  "action":{
+    "default_title": "MongoDB resource finder & opener",
+    "default_icon": "gfx/icon.png",
+    "default_popup": "html/popup.html"
+  },
+
+  "permissions": [
+    "tabs"
+  ],
+
+  "background": {
+    "service_worker": "js/background.js"
+  },
+
+  "content_scripts": [{
+    "matches": [
+      "*://*/*"
+    ],
+    "all_frames": true,
+    "run_at": "document_start",
+    "js": [
+      "js/message_utils.js"
+    ],
+    "css": [
+    ]
+  }],
+
+  "icons": { 
+    "16": "gfx/icon16.png",
+    "24": "gfx/icon48.png",
+    "32": "gfx/icon48.png",
+    "48": "gfx/icon48.png",
+    "64": "gfx/icon64.png",
+    "128": "gfx/icon128.png",
+    "256": "gfx/icon256.png"
+  },
+
+  "manifest_version": 3
+}
