@@ -8,15 +8,13 @@ PopupHelper.prototype = {
     constructor: PopupHelper, 
 
     init: function() {
-        console.log("PopupHelper - init()");
-
+        var context = this;
+        
         return Promise.all([
 
-            this.SETTINGS_UTILS.init()
+            context.SETTINGS_UTILS.init()
 
         ]).then(() => {
-
-            console.log("PopupHelper - init() # all promises loaded");
 
         }); 
     },
@@ -27,6 +25,14 @@ PopupHelper.prototype = {
 
     getAutoSubmit: function() {
         return this.SETTINGS_UTILS.load(this.SETTINGS_UTILS.KEYS.autoSubmit);
+    },
+
+    openSettings: function() {
+        if (chrome.runtime.openOptionsPage) {
+            chrome.runtime.openOptionsPage();
+        } else {
+            window.open(chrome.runtime.getURL('html/settings.html'));
+        }
     },
 
     sendResourceIdToBackgroundScriptFromTextfield: function() {

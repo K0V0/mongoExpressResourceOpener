@@ -1,0 +1,47 @@
+<!doctype html>
+
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <title>MongoExpressResourceOpener</title>
+    <link rel="stylesheet" type="text/css" href="/gfx/reset.css">
+    <link rel="stylesheet" type="text/css" href="/gfx/main.css">
+    <link rel="stylesheet" type="text/css" href="/gfx/settings.css">
+    <script src="/js/settings_utils.js"></script>
+    <script src="/js/settings_helper.js"></script>
+    <script src="/js/settings.js"></script>
+  </head>
+
+  <body>
+
+    <section>
+        <h1>Nastavenia</h1>
+    </section>
+
+    <section>
+        <h2>Správanie</h2>
+        <article>
+            <input type="checkbox" id="autoSubmitResourceId">
+            <label for="autoSubmitResourceId" id="autoSubmitResourceIdLabel">Odpáliť requesty automaticky po vložení dát</label>
+        </article>
+    </section>
+
+    <section id="dataSources">
+        <h2>Dátové zostavy</h2>
+        <i>Oddeľujte jednotlivé URL na dátové zostavy novým riadkom</i>
+        <article>
+            <input type="text" id="dataSetsEnviroment_0" placeholder="Názov prostredia..." class="disabled" tabindex="-1">
+            <br>
+            <textarea id="dataSets_0" cols="80" rows="5" placeholder="Dátové zdroje..."></textarea>
+        </article>
+        <button id="addNewEnviromentDataets" class="disabled" tabindex="-1">Pridať ďalšie prostredie</button>
+    </section>
+
+    <section class="right">
+        <button id="saveSettings">Uložiť a zavrieť</button>
+    </section>
+
+  </body>
+
+</html>

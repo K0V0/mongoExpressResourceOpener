@@ -1,0 +1,148 @@
+section {
+    vertical-align: middle;
+}
+
+section:first-child {
+    margin-top: 0;
+}
+
+section:last-child {
+    margin-bottom: 0;
+}
+
+article > * {
+    vertical-align: middle;
+}
+
+h1 {
+    font-size: 1.25em;
+    font-weight: bold;
+}
+
+h2 {
+    font-size: 1.125em;
+}
+
+i {
+    font-style: italic;
+    font-size: 0.75em;
+}
+
+::placeholder {
+    color: #888;
+}
+
+input, button, label, select, textarea {
+    margin: 0.125em;
+}
+
+input, button, select, textarea {
+    border-radius: 0.25em;
+}
+
+button {
+    background-color: #00ADEF;
+    padding: 0.25em 0.375em;
+    font-weight: bold;
+    color:white;
+    transition: background-color 0.25s ease-in-out;
+}
+
+button:hover {
+    background-color: #0092cb;
+}
+
+label:hover {
+    text-decoration: underline;
+}
+
+input[type=text], input[type=checkbox], select, textarea { 
+    border: 0.125em solid #00ADEF;
+    background-color: #eee;
+    transition: background-color 0.25s ease-in-out;
+}
+
+input[type=text]:hover, input[type=checkbox]:hover, select:hover, textarea:hover { 
+    background-color: #f6f6f6;
+}
+
+input[type=checkbox], select, button, label { 
+    cursor: pointer;
+}
+
+input[type=text], select, textarea {
+    text-align: left;
+    padding: 0.125em 0.25em;
+    min-width: 16em;
+}
+
+input[type=text]:active, input[type=text]:focus
+select:active, select:focus
+textarea:active, textarea:focus {
+    background-color: white;
+}
+
+input[type=checkbox] {
+   width: 1.5em;
+   height: 1.5em;
+   position: relative;
+   text-align: center;
+}
+
+input[type=checkbox]::after {
+    content: '✓';
+    color: #bbb;
+    font-weight: bold;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+input[type=checkbox]:checked {
+    background-color: #00ADEF;
+}
+
+input[type=checkbox]:checked::after {
+    color: white;
+}
+
+input[type=checkbox]:checked:hover {
+    background-color: #0092cb;
+}
+
+select {
+    position: relative;
+}
+
+select::after {
+    background-color: #00ADEF;
+    content:'<>';
+    display: block;
+    position: absolute;
+    right:0;
+    top:0;
+    height: 1em;
+    width: 3em;
+}
+
+select > option {
+
+}
+
+
+.centered {
+    text-align: center;
+}
+
+.right {
+    text-align: right;
+}
+
+.disabled {
+    pointer-events: none !important;
+    cursor: not-allowed !important;
+    background-color: #bbb !important;
+    color: #888 !important;
+}

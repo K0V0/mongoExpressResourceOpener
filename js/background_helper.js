@@ -1,21 +1,31 @@
 try {
-    importScripts('/js/message_utils.js');
+    importScripts('/js/message_utils.js', '/js/settings_utils.js');
 } catch (e) {
     console.error(e);
 }
 
 function BackgroundHelper() {
     this.MESSAGE_UTILS = new MessageUtils();
-    //TODO docasne riesenie na proof of concept, bude sa pekne konfigurovat cez GUI v nastaveniach, ulozenie na localStorage alebo ine
-    this.DATASETS = [
-        'https://google.sk',
-        'https://pica.rite',
-        'https://kokot.pica'
-    ];
+    this.SETTINGS_UTILS = new SettingsUtils();
+    this.DATASETS = [];
 }
 
 BackgroundHelper.prototype = {
     constructor: BackgroundHelper,
+
+    init: function() {
+        var context = this;
+
+        return Promise.all([
+
+            context.SETTINGS_UTILS.init()
+
+        ]).then(() => {
+            
+            context.loadDataSets();
+
+        });
+    },
     
     checkResourceExistence: function(resourceId) {
         if (resourceId === undefined || resourceId === null || resourceId.trim() === "") {
@@ -26,7 +36,7 @@ BackgroundHelper.prototype = {
         var promises = [];
 
         for (var i = 0; i < this.DATASETS.length; i++) {
-            promises[i] = fetch(this.DATASETS[i]);
+            promises[i] = fetch(context.buildUrl(this.DATASETS[i], resourceId));
         }
 
         //TODO zamysliet sa nad problematikou ci chcem odpalovat requesty na vsetky datasety ak v nejakom uz bol najdeny daky zaznam.
@@ -40,8 +50,13 @@ BackgroundHelper.prototype = {
                     if(response.value === undefined || response.value.status !== 200) {
                         statuses.push(false);
                     } else {
-                        context.openNewTab(response.value.url);
-                        statuses.push(true);
+                        // pretoze mongo presmeruje a otvori index vsetkych ulozenych resources
+                        if (!context.DATASETS.includes(response.value.url)) {
+                            context.openNewTab(response.value.url);
+                            statuses.push(true);
+                        } else {
+                            statuses.push(false);
+                        }
                     }
                 });
                 if (statuses.every((value) => value === false)) {
@@ -50,7 +65,6 @@ BackgroundHelper.prototype = {
             })
             .catch(error => {
                 context.notFoundMessage();
-                console.log(error);
             });
     },
 
@@ -59,6 +73,15 @@ BackgroundHelper.prototype = {
     },
 
     notFoundMessage: function() {
-        //TODO vratit pouzivatelovi nieco rozumne ze vsetko je na chuja
-    } 
+        //TODO vratit pouzivatelovi nieco rozumne ze vsetko je zle
+    },
+    
+    loadDataSets: function() {
+        //TODO only supported one enviroment yet
+        this.DATASETS = this.SETTINGS_UTILS.load(this.SETTINGS_UTILS.KEYS.dataSources)[0]['dataSets'];
+    },
+
+    buildUrl: function(datasetUrl, resourceId) {
+        return datasetUrl + "/\"" + resourceId + "\"";
+    }
 }

@@ -2,6 +2,7 @@
   "name": "MongoDB resource opener",
   "description": "Opens MongoDB resource",
   "version": "0.1.0",
+  "options_page": "html/settings.html",
 
   "action":{
     "default_title": "MongoDB resource finder & opener",

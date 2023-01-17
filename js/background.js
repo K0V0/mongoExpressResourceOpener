@@ -1,4 +1,3 @@
-
 try {
     importScripts('/js/background_helper.js');
 } catch (e) {
@@ -15,8 +14,16 @@ Background.prototype = {
     init: function() {
         var context = this;
 
-        chrome.runtime.onMessage.addListener((request, sender, sendResponse) => { 
-            context.messageRouter(request); 
+        return Promise.all([
+
+            context.HELPER.init()
+
+        ]).then(() => {
+
+            chrome.runtime.onMessage.addListener((request, sender, sendResponse) => { 
+                context.messageRouter(request); 
+            });
+
         });
     },
 
