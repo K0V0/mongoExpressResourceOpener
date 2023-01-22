@@ -1,6 +1,5 @@
 function Settings() {
     this.HELPER = new SettingsHelper();
-    this.AUTO_SUBMIT_RESOURCE_ID = "autoSubmitResourceId"; 
     this.SAVE_BUTTON = "saveSettings";
 }
 
@@ -21,6 +20,8 @@ Settings.prototype = {
 
             // register listeners
             context.onSaveAction();
+            context.onAddNewEnviroment();
+            context.onRemoveEnviroment();
 
         });
     },
@@ -29,10 +30,32 @@ Settings.prototype = {
     onSaveAction: function() {
         var context = this;
         document
-            .getElementById(context.SAVE_BUTTON)
+            .getElementById(CONSTANTS.elements.settings.saveAndExitButtonId)
             .addEventListener('click', function() { 
                 context.HELPER.loadDataFromElements();
                 context.HELPER.closeTab();
+            }, false);
+    },
+
+    // add another enviroment
+    onAddNewEnviroment: function() {
+        var context = this;
+        document
+            .getElementById(CONSTANTS.elements.settings.addNewEnviromentButtonId)
+            .addEventListener('click', function() { 
+                
+            }, false);
+    },
+
+    // remove whole enviroment and its configuration
+    onRemoveEnviroment: function() {
+        var context = this;
+        document
+            .getElementById(CONSTANTS.elements.settings.dataSourcesSectionId)
+            .addEventListener('click', function(event) {
+                if (event.target.tagName === "BUTTON") {
+                    context.HELPER.removeEnviroment(event.target.id);
+                }
             }, false);
     }
 }

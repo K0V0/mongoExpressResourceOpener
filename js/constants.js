@@ -11,7 +11,10 @@ var CONSTANTS = {
         },
         settings: {
             url: "html/settings.html",
-            autoSubmitResourceCheckboxId: "autoSubmitResourceId"
+            autoSubmitResourceCheckboxId: "autoSubmitResourceId",
+            addNewEnviromentButtonId: "addNewEnviromentDataSets",
+            saveAndExitButtonId: "saveSettings",
+            dataSourcesSectionId: "dataSources"
         }
     },
 

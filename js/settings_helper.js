@@ -1,10 +1,10 @@
 function SettingsHelper() {
     this.SETTINGS_UTILS = new SettingsUtils();
-    this.DATASOURCES_SECTION = "dataSources";
     this.DATASOURCE_CONTAINER_ELEMENT = "article"
     this.DATASOURCE_ENVIROMENT_NAME_ELEMENT = "input[type=text]";
     this.DATASOURCE_ENVIROMENT_ID_ELEMENT = "input[type=hidden]";
     this.DATASOURCE_SETS_ELEMENT = "textarea";
+    this.DATASOURCE_REMOVE_BUTTON = "button";
 }
 
 SettingsHelper.prototype = {
@@ -34,7 +34,7 @@ SettingsHelper.prototype = {
         // datasource(s) for enviroments
         var dataSources = [];
         document
-            .getElementById(context.DATASOURCES_SECTION)
+            .getElementById(CONSTANTS.elements.settings.dataSourcesSectionId)
             .querySelectorAll(context.DATASOURCE_CONTAINER_ELEMENT)
             .forEach(element => {
                 dataSources.push({
@@ -83,6 +83,30 @@ SettingsHelper.prototype = {
         }
     },
 
+    addEnviroment: function() {
+        var context = this;
+        var enviromentsContainer = document
+            .getElementById(CONSTANTS.elements.settings.dataSourcesSectionId)
+        var enviroments = enviromentsContainer
+            .getElementsByTagName(context.DATASOURCE_CONTAINER_ELEMENT);
+        var enviromentsCount = enviroments.length;
+        enviroments[enviromentsCount-1].after(context.duplicateEnviroment(
+            enviroments[0], context.getNextEnviromentId(enviroments)));
+    },
+
+    removeEnviroment: function(containerElemId) {
+        var context = this;
+        var enviromentsCount = document
+            .getElementById(CONSTANTS.elements.settings.dataSourcesSectionId)
+            .getElementsByTagName(context.DATASOURCE_CONTAINER_ELEMENT)
+            .length;
+        if (enviromentsCount < 2) {
+            //TODO do not remove last enviroment configuration, just clean it or set default
+        } else {
+            //TODO implement
+        }
+    },
+
     saveData: function(data) {
         for (key of Object.keys(data)) {
             this.SETTINGS_UTILS.save(key, data[key]);
@@ -108,5 +132,23 @@ SettingsHelper.prototype = {
     
     processDatasetFromStore: function(storeContent) {
         return storeContent.join("\n");
+    },
+
+    duplicateEnviroment: function(enviromentContainerElement, number) {
+
+    },
+
+    getNextEnviromentId: function(enviromentContainerElements) {
+        var result = 0;
+        var context = this;
+        for (enviromentContainerElement of enviromentContainerElements) {
+            var id = parseInt(enviromentContainerElement
+                .querySelector(context.DATASOURCE_ENVIROMENT_NAME_ELEMENT)
+                .id.replace(/\D+/, ""));
+            if (id > result) {
+                result = id;
+            }
+        }
+        return result + 1;
     }
 }
