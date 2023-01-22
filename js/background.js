@@ -28,7 +28,7 @@ Background.prototype = {
     },
 
     messageRouter: function(data) {
-        switch(data.id) {
+        switch(data.id.messageId) {
             case CONSTANTS.messageRouter.submitResourceId.messageId:
                 this.HELPER.checkResourceExistence(data.message);
                 break;

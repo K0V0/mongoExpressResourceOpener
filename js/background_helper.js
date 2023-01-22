@@ -28,6 +28,7 @@ BackgroundHelper.prototype = {
     },
     
     checkResourceExistence: function(resourceId) {
+        console.log("check");
         if (resourceId === undefined || resourceId === null || resourceId.trim() === "") {
             return;
         }
@@ -78,11 +79,8 @@ BackgroundHelper.prototype = {
     
     loadDataSets: function() {
         //TODO only supported one enviroment yet
-        var enviromentConfigs = this.SETTINGS_UTILS.load(CONSTANTS.settings.dotNotationPaths.dataSources);
-        //console.log(enviromentConfigs);
-        this.MONGO_DATA_SET_URLS = enviromentConfigs !== undefined && enviromentConfigs !== null && enviromentConfigs.length > 0
-            ? enviromentConfigs[0][CONSTANTS.settings.dotNotationPaths.dataSourceUrls]
-            : this.SETTINGS_UTILS.load(CONSTANTS.settings.dotNotationPaths.dataSourceUrls);
+        this.MONGO_DATA_SET_URLS = this.SETTINGS_UTILS
+            .load(CONSTANTS.settings.dotNotationPaths.dataSources)[0][CONSTANTS.settings.dotNotationPaths.dataSourceUrls];
     },
 
     buildUrl: function(datasetUrl, resourceId) {
