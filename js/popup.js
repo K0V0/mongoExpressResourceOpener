@@ -1,7 +1,4 @@
 function Popup() {
-    this.SUBMIT_RESOURCE_BUTTON_ID = "submitResourceId";
-    this.AUTO_SUBMIT_RESOURCE_ID = "autoSubmitResourceId"; 
-    this.SETTINGS_BUTTON = "goToOptions";
     this.HELPER = new PopupHelper();
 }
   
@@ -35,20 +32,25 @@ Popup.prototype = {
     // checkbox for autosubmitting setting state
     loadAutoSubmitState: function() {
         document
-            .getElementById(this.AUTO_SUBMIT_RESOURCE_ID)
+            .getElementById(CONSTANTS.elements.popup.autoSubmitResourceCheckboxId)
             .checked = this.HELPER.getAutoSubmit();
     },
 
     //TODO load current dataset (enviroment) user
     loadCurrentEnviroment: function() {
-
+        var selectDropdown = document
+            .getElementById(CONSTANTS.elements.popup.selectEnviromentConfig);
+        this.HELPER
+            .generateOptionsForEnviromentSelect()
+            .forEach(option => selectDropdown.add(option));
+        selectDropdown.value = this.HELPER.getCurrentEnviromentId();
     },
 
     // submitting by button
     onResourceIdSubmited: function() {
         var context = this;
         document
-            .getElementById(context.SUBMIT_RESOURCE_BUTTON_ID)
+            .getElementById(CONSTANTS.elements.popup.submitResourceButtonId)
             .addEventListener('click', function() { context.HELPER.sendResourceIdToBackgroundScriptFromTextfield(); }, false);
     },
 
@@ -56,7 +58,7 @@ Popup.prototype = {
     onAutoSubmitChanged: function() {
         var context = this;
         document
-            .getElementById(context.AUTO_SUBMIT_RESOURCE_ID)
+            .getElementById(CONSTANTS.elements.popup.autoSubmitResourceCheckboxId)
             .addEventListener('change', function() { context.HELPER.setAutoSubmit(this.checked); }, false);
     },
 
@@ -74,7 +76,7 @@ Popup.prototype = {
     onSettingsOpened: function() {
         var context = this;
         document
-            .getElementById(context.SETTINGS_BUTTON)
+            .getElementById(CONSTANTS.elements.popup.goToSettingsButtonId)
             .addEventListener('click', function() { context.HELPER.openSettings(); }, false);
     },
 

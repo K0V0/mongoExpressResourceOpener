@@ -1,7 +1,6 @@
 function PopupHelper() {
     this.MESSAGE_UTILS = new MessageUtils();
     this.SETTINGS_UTILS = new SettingsUtils();
-    this.SUBMIT_RESOURCE_TEXTFIELD_ID  = "resourceId";
 }
 
 PopupHelper.prototype = {
@@ -20,24 +19,41 @@ PopupHelper.prototype = {
     },
 
     setAutoSubmit: function(isEnabled) {
-        this.SETTINGS_UTILS.save(this.SETTINGS_UTILS.KEYS.autoSubmit, isEnabled);
+        this.SETTINGS_UTILS.save(CONSTANTS.settings.dotNotationPaths.autoSubmitSettings, isEnabled);
     },
 
     getAutoSubmit: function() {
-        return this.SETTINGS_UTILS.load(this.SETTINGS_UTILS.KEYS.autoSubmit);
+        return this.SETTINGS_UTILS.load(CONSTANTS.settings.dotNotationPaths.autoSubmitSettings);
+    },
+
+    generateOptionsForEnviromentSelect: function() {
+        var options = [];
+        this.SETTINGS_UTILS
+            .load(CONSTANTS.settings.dotNotationPaths.dataSources)
+            .map(dataSource => new Option(
+                    dataSource[CONSTANTS.settings.dotNotationPaths.dataSourcesEnviromentName], 
+                    dataSource[CONSTANTS.settings.dotNotationPaths.dataSourcesEnviroment]
+                )
+            )
+            .forEach(option => options.push(option))
+        return options;
+    },
+
+    getCurrentEnviromentId: function() {
+        return this.SETTINGS_UTILS.load(CONSTANTS.settings.dotNotationPaths.currentEnviroment);
     },
 
     openSettings: function() {
         if (chrome.runtime.openOptionsPage) {
             chrome.runtime.openOptionsPage();
         } else {
-            window.open(chrome.runtime.getURL('html/settings.html'));
+            window.open(chrome.runtime.getURL(CONSTANTS.elements.settings.url));
         }
     },
 
     sendResourceIdToBackgroundScriptFromTextfield: function() {
         this.sendResourceIdToBackgroundScript(
-            document.getElementById(this.SUBMIT_RESOURCE_TEXTFIELD_ID).value
+            document.getElementById(CONSTANTS.elements.popup.submitResourceTextfieldId).value
         );
     },
 
@@ -50,7 +66,7 @@ PopupHelper.prototype = {
 
     sendResourceIdToBackgroundScript: function(resourceId) {
         this.MESSAGE_UTILS.sendMessage(
-            this.MESSAGE_UTILS.MESSAGE_IDS.SUBMIT_RESOURCE_ID_MESSAGE,
+            CONSTANTS.messageRouter.submitResourceId,
             resourceId
         );
     }

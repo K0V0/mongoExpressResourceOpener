@@ -1,5 +1,5 @@
 try {
-    importScripts('/js/message_utils.js', '/js/settings_utils.js');
+    importScripts('/js/message_utils.js', '/js/settings_utils_helper.js', '/js/settings_utils.js', '/js/constants.js');
 } catch (e) {
     console.error(e);
 }
@@ -7,7 +7,7 @@ try {
 function BackgroundHelper() {
     this.MESSAGE_UTILS = new MessageUtils();
     this.SETTINGS_UTILS = new SettingsUtils();
-    this.DATASETS = [];
+    this.MONGO_DATA_SET_URLS = [];
 }
 
 BackgroundHelper.prototype = {
@@ -35,8 +35,8 @@ BackgroundHelper.prototype = {
         var context = this;
         var promises = [];
 
-        for (var i = 0; i < this.DATASETS.length; i++) {
-            promises[i] = fetch(context.buildUrl(this.DATASETS[i], resourceId));
+        for (var i = 0; i < this.MONGO_DATA_SET_URLS.length; i++) {
+            promises[i] = fetch(context.buildUrl(this.MONGO_DATA_SET_URLS[i], resourceId));
         }
 
         //TODO zamysliet sa nad problematikou ci chcem odpalovat requesty na vsetky datasety ak v nejakom uz bol najdeny daky zaznam.
@@ -51,7 +51,7 @@ BackgroundHelper.prototype = {
                         statuses.push(false);
                     } else {
                         // pretoze mongo presmeruje a otvori index vsetkych ulozenych resources
-                        if (!context.DATASETS.includes(response.value.url)) {
+                        if (!context.MONGO_DATA_SET_URLS.includes(response.value.url)) {
                             context.openNewTab(response.value.url);
                             statuses.push(true);
                         } else {
@@ -78,7 +78,11 @@ BackgroundHelper.prototype = {
     
     loadDataSets: function() {
         //TODO only supported one enviroment yet
-        this.DATASETS = this.SETTINGS_UTILS.load(this.SETTINGS_UTILS.KEYS.dataSources)[0]['dataSets'];
+        var enviromentConfigs = this.SETTINGS_UTILS.load(CONSTANTS.settings.dotNotationPaths.dataSources);
+        //console.log(enviromentConfigs);
+        this.MONGO_DATA_SET_URLS = enviromentConfigs !== undefined && enviromentConfigs !== null && enviromentConfigs.length > 0
+            ? enviromentConfigs[0][CONSTANTS.settings.dotNotationPaths.dataSourceUrls]
+            : this.SETTINGS_UTILS.load(CONSTANTS.settings.dotNotationPaths.dataSourceUrls);
     },
 
     buildUrl: function(datasetUrl, resourceId) {

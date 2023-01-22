@@ -1,15 +1,10 @@
 function SettingsHelper() {
     this.SETTINGS_UTILS = new SettingsUtils();
-    this.AUTO_SUBMIT_RESOURCE_ID = "autoSubmitResourceId";
     this.DATASOURCES_SECTION = "dataSources";
     this.DATASOURCE_CONTAINER_ELEMENT = "article"
-    this.DATASOURCE_ENVIROMENT_ELEMENT = "input[type=text]";
+    this.DATASOURCE_ENVIROMENT_NAME_ELEMENT = "input[type=text]";
+    this.DATASOURCE_ENVIROMENT_ID_ELEMENT = "input[type=hidden]";
     this.DATASOURCE_SETS_ELEMENT = "textarea";
-    
-    this.KEYS = {
-        enviroment: "enviroment",
-        dataSets: "dataSets"
-    }
 }
 
 SettingsHelper.prototype = {
@@ -32,8 +27,8 @@ SettingsHelper.prototype = {
         var data = {};
 
         // submit on paste
-        data[context.SETTINGS_UTILS.KEYS.autoSubmit] = document
-            .getElementById(context.AUTO_SUBMIT_RESOURCE_ID)
+        data[CONSTANTS.settings.dotNotationPaths.autoSubmitSettings] = document
+            .getElementById(CONSTANTS.elements.settings.autoSubmitResourceCheckboxId)
             .checked;
 
         // datasource(s) for enviroments
@@ -43,15 +38,17 @@ SettingsHelper.prototype = {
             .querySelectorAll(context.DATASOURCE_CONTAINER_ELEMENT)
             .forEach(element => {
                 dataSources.push({
-                    [context.KEYS.enviroment]: 
-                        element.querySelector(context.DATASOURCE_ENVIROMENT_ELEMENT).value,
-                    [context.KEYS.dataSets]: 
+                    [CONSTANTS.settings.dotNotationPaths.dataSourcesEnviroment]:
+                        element.querySelector(context.DATASOURCE_ENVIROMENT_ID_ELEMENT).value,
+                    [CONSTANTS.settings.dotNotationPaths.dataSourcesEnviromentName]: 
+                        element.querySelector(context.DATASOURCE_ENVIROMENT_NAME_ELEMENT).value,
+                    [CONSTANTS.settings.dotNotationPaths.dataSourceUrls]: 
                         context.processDatasetFromElement(
                             element.querySelector(context.DATASOURCE_SETS_ELEMENT).value
                         )
                 });
             });
-        data[context.SETTINGS_UTILS.KEYS.dataSources] = dataSources;
+        data[CONSTANTS.settings.dotNotationPaths.dataSources] = dataSources;
 
         // save to store
         context.saveData(data);
@@ -61,13 +58,28 @@ SettingsHelper.prototype = {
         var context = this;
 
         // auto submit setting checkbox
-        var autoSubmit = context.SETTINGS_UTILS.load(context.SETTINGS_UTILS.KEYS.autoSubmit);
-        document.getElementById(context.AUTO_SUBMIT_RESOURCE_ID).checked = autoSubmit;
+        var autoSubmit = this.SETTINGS_UTILS.load(CONSTANTS.settings.dotNotationPaths.autoSubmitSettings);
+        document.getElementById(CONSTANTS.elements.settings.autoSubmitResourceCheckboxId).checked = autoSubmit;
 
         //TODO currently suporting only one enviroment
-        var dataSet = context.SETTINGS_UTILS.load(context.SETTINGS_UTILS.KEYS.dataSources)[0][context.KEYS.dataSets];
-        if (dataSet !== undefined) {
-            document.getElementById("dataSets_0").value = context.processDatasetFromStore(dataSet);
+        // load dataSets (mongo URLs)
+        var enviromentConfigs = this.SETTINGS_UTILS.load(CONSTANTS.settings.dotNotationPaths.dataSources);
+
+        for (var i = 0; i < enviromentConfigs.length; i++) {
+            var dataSets =  enviromentConfigs[i][CONSTANTS.settings.dotNotationPaths.dataSourceUrls];
+            var enviromentId = enviromentConfigs[i][CONSTANTS.settings.dotNotationPaths.dataSourcesEnviroment];
+            var enviromentName = enviromentConfigs[i][CONSTANTS.settings.dotNotationPaths.dataSourcesEnviromentName];
+
+            if (i > 0) {
+                //TODO duplicate existing section and pass values and pass to view
+            }
+
+            // enviroment ID
+            document.getElementById("dataSetsEnviromentId_" + i).value = enviromentId;
+            // enviroment title
+            document.getElementById("dataSetsEnviroment_" + i).value = enviromentName;
+            // textarea with data set urls
+            document.getElementById("dataSets_" + i).value = context.processDatasetFromStore(dataSets);
         }
     },
 
@@ -75,6 +87,12 @@ SettingsHelper.prototype = {
         for (key of Object.keys(data)) {
             this.SETTINGS_UTILS.save(key, data[key]);
         }
+    },
+
+    closeTab: function() {
+        chrome.tabs.getCurrent(function(tab) {
+            chrome.tabs.remove(tab.id, function() { });
+        });
     },
 
     processDatasetFromElement: function(elementContent) {

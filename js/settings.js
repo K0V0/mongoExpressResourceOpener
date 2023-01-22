@@ -30,7 +30,10 @@ Settings.prototype = {
         var context = this;
         document
             .getElementById(context.SAVE_BUTTON)
-            .addEventListener('click', function() { context.HELPER.loadDataFromElements() }, false);
+            .addEventListener('click', function() { 
+                context.HELPER.loadDataFromElements();
+                context.HELPER.closeTab();
+            }, false);
     }
 }
 

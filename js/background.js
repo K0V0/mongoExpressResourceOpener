@@ -1,5 +1,5 @@
 try {
-    importScripts('/js/background_helper.js');
+    importScripts('/js/background_helper.js', '/js/constants.js');
 } catch (e) {
     console.error(e);
 }
@@ -29,7 +29,7 @@ Background.prototype = {
 
     messageRouter: function(data) {
         switch(data.id) {
-            case this.HELPER.MESSAGE_UTILS.MESSAGE_IDS.SUBMIT_RESOURCE_ID_MESSAGE:
+            case CONSTANTS.messageRouter.submitResourceId.messageId:
                 this.HELPER.checkResourceExistence(data.message);
                 break;
         }
