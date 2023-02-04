@@ -8,6 +8,8 @@
     <link rel="stylesheet" type="text/css" href="/gfx/reset.css">
     <link rel="stylesheet" type="text/css" href="/gfx/main.css">
     <link rel="stylesheet" type="text/css" href="/gfx/settings.css">
+    <script src="/js/logger_helper.js"></script>
+    <script src="/js/logger.js"></script>
     <script src="/js/constants.js"></script>
     <script src="/js/settings_utils_helper.js"></script>
     <script src="/js/settings_utils.js"></script>
@@ -26,6 +28,12 @@
         <article>
             <input type="checkbox" id="autoSubmitResourceId">
             <label for="autoSubmitResourceId" id="autoSubmitResourceIdLabel">Odpáliť requesty automaticky po vložení dát</label>
+        </article>
+        <article>
+          <label for="selecEnviroment">Aktuálne prostredie</label>
+          <select id="selectEnviroment">
+            <option selected disabled hidden id="selectEnviromentDefaultOption">Vybrať prostredie...</option>
+          </select>
         </article>
     </section>
 

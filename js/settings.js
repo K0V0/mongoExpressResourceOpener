@@ -1,4 +1,6 @@
 function Settings() {
+    this.LOGGER = new Logger(this);
+    this.LOGGER.log("created");
     this.HELPER = new SettingsHelper();
     this.SAVE_BUTTON = "saveSettings";
 }

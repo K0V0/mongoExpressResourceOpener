@@ -16,7 +16,8 @@ var CONSTANTS = {
             autoSubmitResourceCheckboxId: "autoSubmitResourceId",
             addNewEnviromentButtonId: "addNewEnviromentDataSets",
             saveAndExitButtonId: "saveSettings",
-            dataSourcesSectionId: "dataSources"
+            dataSourcesSectionId: "dataSources",
+            activeEnviroment: "selectEnviroment"
         }
     },
 

@@ -11,3 +11,7 @@ article {
     margin: 0.5em 0em;
 }
 
+article:first-of-type {
+    margin-top: 1em;
+}
+

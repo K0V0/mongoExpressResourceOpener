@@ -89,7 +89,7 @@ Popup.prototype = {
         var context = this;
         document
             .getElementById(CONSTANTS.elements.popup.selectEnviromentConfig)
-            .addEventListener('select', function() { context.HELPER.changeEnviroment(); }, false);
+            .addEventListener('select', function() { context.HELPER.changeEnviroment(this); }, false);
 
     }
 

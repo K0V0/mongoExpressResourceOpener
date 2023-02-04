@@ -53,8 +53,8 @@ PopupHelper.prototype = {
         return this.SETTINGS_UTILS.load(CONSTANTS.settings.dotNotationPaths.currentEnviroment);
     },
 
-    setCurrentEnviromentId: function() {
-        console.log("cyka blyat");
+    setCurrentEnviromentId: function(enviromentId) {
+        console.log(enviromentId);
     },
 
     // go to settings button actions

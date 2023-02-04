@@ -1,4 +1,6 @@
 function SettingsHelper() {
+    this.LOGGER = new Logger(this);
+    this.LOGGER.log("created");
     this.SETTINGS_UTILS = new SettingsUtils();
     this.DATASOURCE_CONTAINER_ELEMENT = "article"
     this.DATASOURCE_ENVIROMENT_NAME_ELEMENT = "input[type=text]";
@@ -60,6 +62,14 @@ SettingsHelper.prototype = {
         // auto submit setting checkbox
         var autoSubmit = this.SETTINGS_UTILS.load(CONSTANTS.settings.dotNotationPaths.autoSubmitSettings);
         document.getElementById(CONSTANTS.elements.settings.autoSubmitResourceCheckboxId).checked = autoSubmit;
+
+        // currently selected enviroment dropdown
+        // load available options
+        
+
+        // preselect currently used
+        var currentEnviroment = this.SETTINGS_UTILS.load(CONSTANTS.settings.dotNotationPaths.currentEnviroment);
+        document.getElementById(CONSTANTS.elements.settings.activeEnviroment).value = currentEnviroment;
 
         //TODO currently suporting only one enviroment
         // load dataSets (mongo URLs)
