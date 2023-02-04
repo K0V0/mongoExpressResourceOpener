@@ -1,4 +1,6 @@
 function SettingsUtilsHelper() {
+    this.LOGGER = new Logger(this);
+    this.LOGGER.log("created");
 
     // default in parent determines quantity of settings
     // for example array [] means that there can be multiple configurations
@@ -56,7 +58,8 @@ SettingsUtilsHelper.prototype = {
     constructor: SettingsUtilsHelper,
 
     init: function() {
-
+        var context = this;
+        context.LOGGER.log("inited");
     },
 
     getStoreKeyName: function(keyDotNotation) {

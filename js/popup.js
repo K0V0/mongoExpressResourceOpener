@@ -1,4 +1,6 @@
 function Popup() {
+    this.LOGGER = new Logger(this);
+    this.LOGGER.log("created");
     this.HELPER = new PopupHelper();
 }
   
@@ -8,12 +10,14 @@ Popup.prototype = {
     // runs on every popup open
     init: function() {
         var context = this;
+        context.LOGGER.log("inited");
 
         Promise.all([
             
             context.HELPER.init(),
             
         ]).then(() => {
+            context.LOGGER.log("promises loaded");
 
             // settings, load states of HTML elements
             context.loadAutoSubmitState();
@@ -41,7 +45,7 @@ Popup.prototype = {
         var selectDropdown = document
             .getElementById(CONSTANTS.elements.popup.selectEnviromentConfig);
         this.HELPER
-            .generateOptionsForEnviromentSelect()
+            .getOptionsForEnviromentSelect()
             .forEach(option => selectDropdown.add(option));
         selectDropdown.value = this.HELPER.getCurrentEnviromentId();
     },
@@ -82,6 +86,10 @@ Popup.prototype = {
 
     //TODO change enviroment settings
     onEnviromentChanged: function() {
+        var context = this;
+        document
+            .getElementById(CONSTANTS.elements.popup.selectEnviromentConfig)
+            .addEventListener('select', function() { context.HELPER.changeEnviroment(); }, false);
 
     }
 

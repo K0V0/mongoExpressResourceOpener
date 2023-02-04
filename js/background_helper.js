@@ -1,13 +1,22 @@
 try {
-    importScripts('/js/message_utils.js', '/js/settings_utils_helper.js', '/js/settings_utils.js', '/js/constants.js');
+    importScripts(
+        '/js/message_utils.js',
+        '/js/settings_utils_helper.js',
+        '/js/settings_utils.js',
+        '/js/constants.js',
+        '/js/logger.js',
+        '/js/logger_helper.js'
+    );
 } catch (e) {
     console.error(e);
 }
 
 function BackgroundHelper() {
+    this.LOGGER = new Logger(this);
+    this.LOGGER.log("created");
     this.MESSAGE_UTILS = new MessageUtils();
     this.SETTINGS_UTILS = new SettingsUtils();
-    this.MONGO_DATA_SET_URLS = [];
+    this.MONGO_ENVIROMENTS = [];
 }
 
 BackgroundHelper.prototype = {
@@ -15,29 +24,32 @@ BackgroundHelper.prototype = {
 
     init: function() {
         var context = this;
+        context.LOGGER.log("inited");
 
         return Promise.all([
 
             context.SETTINGS_UTILS.init()
 
         ]).then(() => {
+            context.LOGGER.log("promises loaded");
             
-            context.loadDataSets();
+            context.loadEnviroments();
 
         });
     },
     
-    checkResourceExistence: function(resourceId) {
-        console.log("check");
+    checkResourceExistence: function(resourceId, enviromentId) {
         if (resourceId === undefined || resourceId === null || resourceId.trim() === "") {
             return;
         }
 
         var context = this;
         var promises = [];
+        var dataSets = this.getEnviromentDataSets(enviromentId);
 
-        for (var i = 0; i < this.MONGO_DATA_SET_URLS.length; i++) {
-            promises[i] = fetch(context.buildUrl(this.MONGO_DATA_SET_URLS[i], resourceId));
+        // TODO zamysliet sa nad funkcionalitiou v buducnosti, ci nechcem odpalovat aj na viac prostredi naraz
+        for (var i = 0; i < dataSets.length; i++) {
+            promises[i] = fetch(context.buildUrl(dataSets[i], resourceId));
         }
 
         //TODO zamysliet sa nad problematikou ci chcem odpalovat requesty na vsetky datasety ak v nejakom uz bol najdeny daky zaznam.
@@ -52,7 +64,7 @@ BackgroundHelper.prototype = {
                         statuses.push(false);
                     } else {
                         // pretoze mongo presmeruje a otvori index vsetkych ulozenych resources
-                        if (!context.MONGO_DATA_SET_URLS.includes(response.value.url)) {
+                        if (!dataSets.includes(response.value.url)) {
                             context.openNewTab(response.value.url);
                             statuses.push(true);
                         } else {
@@ -61,11 +73,13 @@ BackgroundHelper.prototype = {
                     }
                 });
                 if (statuses.every((value) => value === false)) {
-                    context.notFoundMessage();
+                    context.notFoundMessage(resourceId, enviromentId);
+                    console.log("Nothing found for resource with ID: " + resourceId);
                 }
             })
             .catch(error => {
                 context.notFoundMessage();
+                console.log("Error occured when trying to found resource with ID: " + resourceId);
             });
     },
 
@@ -73,14 +87,23 @@ BackgroundHelper.prototype = {
         chrome.tabs.create({ url: url });
     },
 
-    notFoundMessage: function() {
-        //TODO vratit pouzivatelovi nieco rozumne ze vsetko je zle
+    notFoundMessage: function(resourceId, enviromentId) {
+        this.MESSAGE_UTILS.showNotification(
+            "Nemožno nájsť resource",
+            resourceId + " na prostredí " + enviromentId
+        );
     },
     
-    loadDataSets: function() {
-        //TODO only supported one enviroment yet
-        this.MONGO_DATA_SET_URLS = this.SETTINGS_UTILS
-            .load(CONSTANTS.settings.dotNotationPaths.dataSources)[0][CONSTANTS.settings.dotNotationPaths.dataSourceUrls];
+    loadEnviroments: function() {
+        this.MONGO_ENVIROMENTS = this.SETTINGS_UTILS.load(CONSTANTS.settings.dotNotationPaths.dataSources);
+    },
+
+    getEnviromentDataSets: function(enviromentId) {
+        for (var i = 0; i < this.MONGO_ENVIROMENTS.length; i++) {
+            if (this.MONGO_ENVIROMENTS[i][CONSTANTS.settings.dotNotationPaths.dataSourcesEnviroment] == enviromentId) {
+                return this.MONGO_ENVIROMENTS[i][CONSTANTS.settings.dotNotationPaths.dataSourceUrls];
+            }
+        }
     },
 
     buildUrl: function(datasetUrl, resourceId) {

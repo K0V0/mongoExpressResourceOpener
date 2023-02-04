@@ -1,4 +1,6 @@
 function SettingsUtils() {
+    this.LOGGER = new Logger(this);
+    this.LOGGER.log("created");
     this.HELPER = new SettingsUtilsHelper();
     this.SETTINGS = {};
 }
@@ -8,11 +10,14 @@ SettingsUtils.prototype = {
 
     init: function() {
         var context  = this;
+        context.LOGGER.log("inited");
+
         return Promise.all([
 
             this.loadAllFromStore()
 
         ]).then(() => {
+            context.LOGGER.log("promises loaded");
 
             context.HELPER.init();
             
@@ -36,6 +41,7 @@ SettingsUtils.prototype = {
 
     loadAllFromStore: function() {
         context = this;
+        context.LOGGER.log("loaded settings from chrome store");
         return new Promise((resolve, reject) => {
             chrome.storage.sync.get(null, resolve);
         })

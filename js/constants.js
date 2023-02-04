@@ -1,3 +1,5 @@
+// "class" with mainly object keys and global constants
+
 var CONSTANTS = {
 
     // IDs and other props of elements in HTML views
@@ -18,10 +20,15 @@ var CONSTANTS = {
         }
     },
 
-    // message broker related
+    // message broker related - message IDs
     messageRouter: {
         submitResourceId: {
-            messageId: 1
+            messageId: 1,
+            enviroment: "enviroment",
+            resourceId: "resourceId"
+        },
+        submitEnviromentChange: {
+            messageId: 2
         }
     },
 
@@ -39,6 +46,13 @@ var CONSTANTS = {
             dataSourceUrls: "dataSetQueryUrls",
             dataSourcesEnviroment: "dataSetEnviromentId",
             dataSourcesEnviromentName: "dataSetEnviromentName"
+        }
+    },
+
+    strings: {
+        sk: {
+            forResource: "Pre resource",
+            nothingWasFound: "nebolo nič nájdené"
         }
     }
 }
